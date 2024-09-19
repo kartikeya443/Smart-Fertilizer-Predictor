@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Fertilizer Predictor</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-image: url('/api/placeholder/1920/1080');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        .container {
+            background-color: rgba(255, 255, 255, 0.9);
+            border-radius: 10px;
+            padding: 2rem;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+        h1 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 2rem;
+        }
+        .form-group {
+            margin-bottom: 1rem;
+        }
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            color: #34495e;
+        }
+        input, select {
+            width: 100%;
+            padding: 0.5rem;
+            border: 1px solid #bdc3c7;
+            border-radius: 4px;
+            font-size: 1rem;
+        }
+        button {
+            background-color: #27ae60;
+            color: white;
+            border: none;
+            padding: 0.75rem 1rem;
+            font-size: 1rem;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            width: 100%;
+            margin-top: 1rem;
+        }
+        button:hover {
+            background-color: #2ecc71;
+        }
+        .icon {
+            margin-right: 0.5rem;
+            color: #27ae60;
+        }
+        .result-card {
+            background-color: #ecf0f1;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-top: 2rem;
+        }
+        .result-card h2 {
+            color: #2c3e50;
+            margin-top: 0;
+        }
+        .login-signup-link {
+            text-align: center;
+            margin-top: 1rem;
+        }
+        .login-signup-link a {
+            color: #3498db;
+            text-decoration: none;
+        }
+        .login-signup-link a:hover {
+            text-decoration: underline;
+        }
+        .hidden {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1><i class="fas fa-leaf icon"></i>Smart Fertilizer Predictor</h1>
+        
+        <!-- Login Form -->
+        <div id="loginForm">
+            <form onsubmit="return handleLogin(event)">
+                <div class="form-group">
+                    <label><i class="fas fa-user icon"></i>Username</label>
+                    <input type="text" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock icon"></i>Password</label>
+                    <input type="password" name="password" required>
+                </div>
+                <button type="submit"><i class="fas fa-sign-in-alt icon"></i>Login</button>
+            </form>
+            <div class="login-signup-link">
+                <p>Don't have an account? <a href="#" onclick="showSignup()">Sign up</a></p>
+            </div>
+        </div>
+
+        <!-- Signup Form -->
+        <div id="signupForm" class="hidden">
+            <form onsubmit="return handleSignup(event)">
+                <div class="form-group">
+                    <label><i class="fas fa-user icon"></i>Username</label>
+                    <input type="text" name="username" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-envelope icon"></i>Email</label>
+                    <input type="email" name="email" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock icon"></i>Password</label>
+                    <input type="password" name="password" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-lock icon"></i>Confirm Password</label>
+                    <input type="password" name="confirmPassword" required>
+                </div>
+                <button type="submit"><i class="fas fa-user-plus icon"></i>Sign Up</button>
+            </form>
+            <div class="login-signup-link">
+                <p>Already have an account? <a href="#" onclick="showLogin()">Login</a></p>
+            </div>
+        </div>
+
+        <!-- Main Application -->
+        <div id="mainApp" class="hidden">
+            <form onsubmit="return handlePrediction(event)">
+                <div class="form-group">
+                    <label><i class="fas fa-thermometer-half icon"></i>Temperature (°C)</label>
+                    <input type="number" name="temperature" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-tint icon"></i>Humidity (%)</label>
+                    <input type="number" name="humidity" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-water icon"></i>Moisture</label>
+                    <input type="number" name="moisture" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-mountain icon"></i>Soil Type</label>
+                    <select name="soilType" required>
+                        <option value="">Select Soil Type</option>
+                        <option value="black">Black</option>
+                        <option value="clayey">Clayey</option>
+                        <option value="loamy">Loamy</option>
+                        <option value="red">Red</option>
+                        <option value="sandy">Sandy</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-seedling icon"></i>Crop Type</label>
+                    <select name="cropType" required>
+                        <option value="">Select Crop Type</option>
+                        <option value="barley">Barley</option>
+                        <option value="cotton">Cotton</option>
+                        <option value="groundNuts">Ground Nuts</option>
+                        <option value="maize">Maize</option>
+                        <option value="millets">Millets</option>
+                        <option value="oilSeeds">Oil Seeds</option>
+                        <option value="paddy">Paddy</option>
+                        <option value="pulses">Pulses</option>
+                        <option value="sugarcane">Sugarcane</option>
+                        <option value="tobacco">Tobacco</option>
+                        <option value="wheat">Wheat</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-flask icon"></i>Nitrogen</label>
+                    <input type="number" name="nitrogen" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-flask icon"></i>Potassium</label>
+                    <input type="number" name="potassium" required>
+                </div>
+                <div class="form-group">
+                    <label><i class="fas fa-flask icon"></i>Phosphorous</label>
+                    <input type="number" name="phosphorous" required>
+                </div>
+                <button type="submit"><i class="fas fa-search icon"></i>Predict Fertilizer</button>
+            </form>
+            <div id="result" class="result-card hidden">
+                <h2><i class="fas fa-bullseye icon"></i>Prediction Result</h2>
+                <p><strong>Recommended Fertilizer:</strong> <span id="recommendedFertilizer"></span></p>
+            </div>
+            <button onclick="logout()" style="margin-top: 1rem;"><i class="fas fa-sign-out-alt icon"></i>Logout</button>
+        </div>
+    </div>
+
+    <script>
+        function showLogin() {
+            document.getElementById('loginForm').classList.remove('hidden');
+            document.getElementById('signupForm').classList.add('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+        }
+
+        function showSignup() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('signupForm').classList.remove('hidden');
+            document.getElementById('mainApp').classList.add('hidden');
+        }
+
+        function showMainApp() {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('signupForm').classList.add('hidden');
+            document.getElementById('mainApp').classList.remove('hidden');
+        }
+
+        async function handleLogin(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            const response = await fetch('/login', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            if (result.success) {
+                showMainApp();
+            } else {
+                alert(result.message);
+            }
+        }
+
+        async function handleSignup(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+            if (formData.get('password') !== formData.get('confirmPassword')) {
+                alert("Passwords don't match");
+                return;
+            }
+            const response = await fetch('/signup', {
+                method: 'POST',
+                body: formData
+            });
+            const result = await response.json();
+            if (result.success) {
+                alert('Signup successful. Please login.');
+                showLogin();
+            } else {
+                alert(result.message);
+            }
+        }
+
+        async function handlePrediction(event) {
+            event.preventDefault();
+            const formData = new FormData(event.target);
+        
+            console.log("Form Data:", Object.fromEntries(formData.entries())); // Log the form data being sent
+        
+            const response = await fetch('/predict', {
+                method: 'POST',
+                body: formData
+            });
+        
+            const result = await response.json();
+        
+            console.log("Prediction Response:", result); // Log the response
+        
+            if (result.success) {
+                document.getElementById('recommendedFertilizer').textContent = result.fertilizer;
+                document.getElementById('result').classList.remove('hidden');
+            } else {
+                alert(result.message);
+            }
+        }
+        
+
+        function logout() {
+            fetch('/logout', { method: 'POST' })
+                .then(() => showLogin())
+                .catch(error => console.error('Error:', error));
+        }
+    </script>
+</body>
+</html>
